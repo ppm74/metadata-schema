@@ -612,10 +612,10 @@
             "null"
           ]
         },
-        "components": {
-          "description": "Physical components and parts of the cell that are in contact with the electrolyte.",
+        "parts": {
+          "description": "Functional parts of the cell that are in contact with or close to an electrolyte, such as the cell body, a membrane, a degasser or an electrode holder.",
           "items": {
-            "$ref": "#/$defs/ElectrochemicalCellComponent"
+            "$ref": "#/$defs/ElectrochemicalCellPart"
           },
           "type": [
             "array",
@@ -657,8 +657,18 @@
     },
     "ElectrochemicalCellComponent": {
       "additionalProperties": false,
-      "description": "A component or part of the electrochemical cell.",
+      "description": "A component of a part of the electrochemical cell, such as the glass tube or the membrane of a degasser.",
       "properties": {
+        "contact": {
+          "description": "Names of the electrolytes in system.electrolytes that the component is in contact with. Omit for a component that is close to but not in contact with an electrolyte, such as a clamp holding an electrode.",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
         "description": {
           "description": "Detailed description of the component.",
           "type": [
@@ -666,20 +676,94 @@
             "null"
           ]
         },
-        "name": {
-          "description": "Name or identifier of the component.",
-          "type": "string"
+        "material": {
+          "description": "Material of the component.",
+          "type": [
+            "string",
+            "null"
+          ]
         },
-        "part": {
-          "description": "Part number or designation.",
+        "name": {
+          "description": "Name of the component.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ElectrochemicalCellComponentSource"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Source information for the component."
+        }
+      },
+      "title": "ElectrochemicalCellComponent",
+      "type": "object"
+    },
+    "ElectrochemicalCellComponentSource": {
+      "additionalProperties": false,
+      "description": "Source information for a component of the electrochemical cell.",
+      "properties": {
+        "manufacturer": {
+          "description": "Name of the manufacturer.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "supplier": {
+          "description": "Name of the supplier.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "ElectrochemicalCellComponentSource",
+      "type": "object"
+    },
+    "ElectrochemicalCellPart": {
+      "additionalProperties": false,
+      "description": "A functional part of the electrochemical cell that is in contact with or close to an electrolyte.",
+      "properties": {
+        "comment": {
+          "description": "Additional comment on the part.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "components": {
+          "description": "What the part is made of. A part of a single material has one component.",
+          "items": {
+            "$ref": "#/$defs/ElectrochemicalCellComponent"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "description": {
+          "description": "Detailed description of the part.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "description": "Name of the part.",
           "type": "string"
         }
       },
       "required": [
-        "name",
-        "part"
+        "name"
       ],
-      "title": "ElectrochemicalCellComponent",
+      "title": "ElectrochemicalCellPart",
       "type": "object"
     },
     "ElectrochemicalCellSource": {

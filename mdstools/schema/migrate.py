@@ -39,8 +39,8 @@ from mdstools.schema.migrations import MIGRATIONS, UNRELEASED
 from mdstools.schema.validator import (
     KNOWN_SCHEMAS,
     _load_data,
-    validate_instrument_references,
     validate_metadata,
+    validate_references,
 )
 
 #: Field carrying the schema version inside a metadata document.
@@ -197,18 +197,18 @@ class MetadataMigrator:
             ``.json`` schema file.
         :param data: Document to validate; defaults to :meth:`migrated`.
         :returns: The validated document.
-        :raises ValueError: if schema or instrument-reference validation fails.
+        :raises ValueError: if schema or reference validation fails.
         """
         if data is None:
             data = self.migrated()
 
         validate_metadata(data, str(_resolve_schema_path(schema)))
 
-        reference_errors = validate_instrument_references(data)
+        reference_errors = validate_references(data)
         if reference_errors:
             details = "\n".join(f"- {message}" for message in reference_errors)
             raise ValueError(
-                "Instrument reference validation failed with "
+                "Reference validation failed with "
                 f"{len(reference_errors)} error(s):\n{details}"
             )
         return data

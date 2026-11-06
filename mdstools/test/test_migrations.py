@@ -175,7 +175,7 @@ def test_validate_detects_dangling_instrument_reference():
     broken["experimental"]["operationParameters"]["massTransport"]["rotation"][
         "control"
     ]["instrument"] = "NotInList"
-    with pytest.raises(ValueError, match="Instrument reference"):
+    with pytest.raises(ValueError, match="Reference validation"):
         MetadataMigrator(data).validate("autotag", data=broken)
 
 

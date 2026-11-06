@@ -317,6 +317,7 @@ class Process(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "Jane Doe"}],
@@ -421,7 +422,12 @@ class Instrumentation(ConfiguredBaseModel):
         description="""Manufacturer of the instrument.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["Instrumentation", "ElectrodeSource", "ComponentSource"],
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
                 "examples": [{"value": "Awesome Supplier Inc."}],
             }
         },
@@ -441,6 +447,7 @@ class Instrumentation(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "Poti05"}],
@@ -462,7 +469,12 @@ class Instrumentation(ConfiguredBaseModel):
         description="""Supplier of the instrument.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["Instrumentation", "ElectrodeSource", "ComponentSource"],
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
                 "examples": [{"value": "Awesome Supplier Inc."}],
             }
         },
@@ -520,6 +532,7 @@ class Quantity(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [{"value": "Measured at room temperature"}],
@@ -600,6 +613,7 @@ class Uncertainty(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [
@@ -691,6 +705,7 @@ class Control(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -760,6 +775,7 @@ class ControlledQuantity(Quantity):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [{"value": "Measured at room temperature"}],
@@ -1037,6 +1053,7 @@ class Experimental(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -1127,6 +1144,7 @@ class FigureDescription(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [{"value": "Data below 0 V was cut off by the x-axis."}],
@@ -1179,6 +1197,7 @@ class Software(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "svgdigitizer"}],
@@ -1242,6 +1261,7 @@ class DataField(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "E_WE"}],
@@ -1309,6 +1329,7 @@ class DataField(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -1391,6 +1412,7 @@ class Project(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "ERC-2024-STG"}],
@@ -1567,6 +1589,7 @@ class Source(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [
@@ -1746,6 +1769,7 @@ class PreparationProcedure(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -1784,6 +1808,7 @@ class Electrode(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "WE1"}],
@@ -1827,6 +1852,7 @@ class Electrode(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -1886,6 +1912,7 @@ class Electrode(ConfiguredBaseModel):
                     "Electrode",
                     "Component",
                     "ElectrochemicalCell",
+                    "ElectrochemicalCellComponent",
                     "Svgdigitizer",
                 ]
             }
@@ -1924,7 +1951,7 @@ class Electrode(ConfiguredBaseModel):
         description="""Chemical symbol or abbreviation of the electrode material.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["Electrode"],
+                "domain_of": ["Electrode", "ElectrochemicalCellComponent"],
                 "examples": [{"value": "Pt"}, {"value": "Au"}, {"value": "GC"}],
             }
         },
@@ -1955,7 +1982,12 @@ class ElectrodeSource(ConfiguredBaseModel):
         description="""Name of the electrode manufacturer.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["Instrumentation", "ElectrodeSource", "ComponentSource"],
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
                 "examples": [{"value": "Your Favorite Crystals GmbH"}],
             }
         },
@@ -2022,7 +2054,12 @@ class ElectrodeSource(ConfiguredBaseModel):
         description="""Name of the supplier.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["Instrumentation", "ElectrodeSource", "ComponentSource"],
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
                 "examples": [{"value": "Chemicals & More Inc."}],
             }
         },
@@ -2105,6 +2142,7 @@ class Shape(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -2138,6 +2176,7 @@ class Component(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "H2SO4"}],
@@ -2198,6 +2237,7 @@ class Component(ConfiguredBaseModel):
                     "Electrode",
                     "Component",
                     "ElectrochemicalCell",
+                    "ElectrochemicalCellComponent",
                     "Svgdigitizer",
                 ]
             }
@@ -2260,6 +2300,7 @@ class Component(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [{"value": "Freshly prepared solution"}],
@@ -2292,7 +2333,12 @@ class ComponentSource(ConfiguredBaseModel):
         description="""Name of the company that supplied the chemical.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["Instrumentation", "ElectrodeSource", "ComponentSource"],
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
                 "examples": [{"value": "Your Chemical Supplier Inc."}],
             }
         },
@@ -2302,7 +2348,12 @@ class ComponentSource(ConfiguredBaseModel):
         description="""Name of the company or organization that manufactured the chemical.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["Instrumentation", "ElectrodeSource", "ComponentSource"],
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
                 "examples": [{"value": "Organic Chemistry II - Bar Group"}],
             }
         },
@@ -2377,6 +2428,7 @@ class Electrolyte(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [
@@ -2430,7 +2482,7 @@ class Electrolyte(ConfiguredBaseModel):
                 "domain_of": [
                     "Electrolyte",
                     "ElectrolyteContainer",
-                    "ElectrochemicalCell",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ]
             }
@@ -2474,6 +2526,7 @@ class Electrolyte(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [
@@ -2506,6 +2559,7 @@ class ElectrolyteContainer(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -2521,7 +2575,7 @@ class ElectrolyteContainer(ConfiguredBaseModel):
                 "domain_of": [
                     "Electrolyte",
                     "ElectrolyteContainer",
-                    "ElectrochemicalCell",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ]
             }
@@ -2553,6 +2607,7 @@ class ElectrolyteContainerComponent(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
                 "examples": [{"value": "Bottle"}],
@@ -2600,6 +2655,7 @@ class ElectrolyteContainerComponent(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [{"value": "Cleaned with aqua regia"}],
@@ -2647,19 +2703,10 @@ class ElectrochemicalCell(ConfiguredBaseModel):
             }
         },
     )
-    components: Optional[list[ElectrochemicalCellComponent]] = Field(
+    parts: Optional[list[ElectrochemicalCellPart]] = Field(
         default=None,
-        description="""Physical components and parts of the cell that are in contact with the electrolyte.""",
-        json_schema_extra={
-            "linkml_meta": {
-                "domain_of": [
-                    "Electrolyte",
-                    "ElectrolyteContainer",
-                    "ElectrochemicalCell",
-                    "Atmosphere",
-                ]
-            }
-        },
+        description="""Functional parts of the cell that are in contact with or close to an electrolyte, such as the cell body, a membrane, a degasser or an electrode holder.""",
+        json_schema_extra={"linkml_meta": {"domain_of": ["ElectrochemicalCell"]}},
     )
     cellDescription: Optional[str] = Field(
         default=None,
@@ -2697,6 +2744,7 @@ class ElectrochemicalCell(ConfiguredBaseModel):
                     "Electrode",
                     "Component",
                     "ElectrochemicalCell",
+                    "ElectrochemicalCellComponent",
                     "Svgdigitizer",
                 ]
             }
@@ -2704,9 +2752,9 @@ class ElectrochemicalCell(ConfiguredBaseModel):
     )
 
 
-class ElectrochemicalCellComponent(ConfiguredBaseModel):
+class ElectrochemicalCellPart(ConfiguredBaseModel):
     """
-    A component or part of the electrochemical cell.
+    A functional part of the electrochemical cell that is in contact with or close to an electrolyte.
     """
 
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta(
@@ -2717,7 +2765,7 @@ class ElectrochemicalCellComponent(ConfiguredBaseModel):
 
     name: str = Field(
         default=...,
-        description="""Name or identifier of the component.""",
+        description="""Name of the part.""",
         json_schema_extra={
             "linkml_meta": {
                 "domain_of": [
@@ -2730,19 +2778,118 @@ class ElectrochemicalCellComponent(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                 ],
-                "examples": [{"value": "Cell body"}],
+                "examples": [
+                    {"value": "cell body"},
+                    {"value": "membrane"},
+                    {"value": "degasser"},
+                ],
             }
         },
     )
-    part: str = Field(
-        default=...,
-        description="""Part number or designation.""",
+    description: Optional[str] = Field(
+        default=None,
+        description="""Detailed description of the part.""",
         json_schema_extra={
             "linkml_meta": {
-                "domain_of": ["ElectrochemicalCellComponent"],
-                "examples": [{"value": "EC-CELL-100"}],
+                "domain_of": [
+                    "Control",
+                    "Experimental",
+                    "DataField",
+                    "PreparationProcedure",
+                    "Electrode",
+                    "Shape",
+                    "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
+                    "ElectrochemicalCellComponent",
+                    "Atmosphere",
+                ],
+                "examples": [{"value": "Saturates the electrolyte with N2."}],
+            }
+        },
+    )
+    comment: Optional[str] = Field(
+        default=None,
+        description="""Additional comment on the part.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": [
+                    "Quantity",
+                    "Uncertainty",
+                    "FigureDescription",
+                    "Source",
+                    "Component",
+                    "Electrolyte",
+                    "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
+                    "Atmosphere",
+                ],
+                "examples": [{"value": "Replaced after each measurement series."}],
+            }
+        },
+    )
+    components: Optional[list[ElectrochemicalCellComponent]] = Field(
+        default=None,
+        description="""What the part is made of. A part of a single material has one component.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": [
+                    "Electrolyte",
+                    "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
+                    "Atmosphere",
+                ]
+            }
+        },
+    )
+
+
+class ElectrochemicalCellComponent(ConfiguredBaseModel):
+    """
+    A component of a part of the electrochemical cell, such as the glass tube or the membrane of a degasser.
+    """
+
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta(
+        {
+            "from_schema": "https://echemdb.github.io/metadata-schema/system/electrochemical_cell"
+        }
+    )
+
+    name: Optional[str] = Field(
+        default=None,
+        description="""Name of the component.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": [
+                    "Process",
+                    "Instrumentation",
+                    "Software",
+                    "DataField",
+                    "Project",
+                    "Electrode",
+                    "Component",
+                    "Electrolyte",
+                    "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
+                    "ElectrochemicalCellComponent",
+                ],
+                "examples": [{"value": "glass tube"}, {"value": "membrane"}],
+            }
+        },
+    )
+    material: Optional[str] = Field(
+        default=None,
+        description="""Material of the component.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": ["Electrode", "ElectrochemicalCellComponent"],
+                "examples": [
+                    {"value": "borosilicate glass"},
+                    {"value": "Nafion"},
+                    {"value": "PTFE"},
+                ],
             }
         },
     )
@@ -2759,10 +2906,79 @@ class ElectrochemicalCellComponent(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
-                "examples": [{"value": "Borosilicate glass cell with multiple ports"}],
+                "examples": [{"value": "Cation exchange membrane."}],
+            }
+        },
+    )
+    contact: Optional[list[str]] = Field(
+        default=None,
+        description="""Names of the electrolytes in system.electrolytes that the component is in contact with. Omit for a component that is close to but not in contact with an electrolyte, such as a clamp holding an electrode.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": ["ElectrochemicalCellComponent"],
+                "examples": [{"value": "[catholyte, anolyte]"}],
+            }
+        },
+    )
+    source: Optional[ElectrochemicalCellComponentSource] = Field(
+        default=None,
+        description="""Source information for the component.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": [
+                    "Electrode",
+                    "Component",
+                    "ElectrochemicalCell",
+                    "ElectrochemicalCellComponent",
+                    "Svgdigitizer",
+                ]
+            }
+        },
+    )
+
+
+class ElectrochemicalCellComponentSource(ConfiguredBaseModel):
+    """
+    Source information for a component of the electrochemical cell.
+    """
+
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta(
+        {
+            "from_schema": "https://echemdb.github.io/metadata-schema/system/electrochemical_cell"
+        }
+    )
+
+    manufacturer: Optional[str] = Field(
+        default=None,
+        description="""Name of the manufacturer.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
+                "examples": [{"value": "Chemours"}],
+            }
+        },
+    )
+    supplier: Optional[str] = Field(
+        default=None,
+        description="""Name of the supplier.""",
+        json_schema_extra={
+            "linkml_meta": {
+                "domain_of": [
+                    "Instrumentation",
+                    "ElectrodeSource",
+                    "ComponentSource",
+                    "ElectrochemicalCellComponentSource",
+                ],
+                "examples": [{"value": "Sigma-Aldrich"}],
             }
         },
     )
@@ -2912,7 +3128,7 @@ class Atmosphere(ConfiguredBaseModel):
                 "domain_of": [
                     "Electrolyte",
                     "ElectrolyteContainer",
-                    "ElectrochemicalCell",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ]
             }
@@ -2954,6 +3170,7 @@ class Atmosphere(ConfiguredBaseModel):
                     "Electrode",
                     "Shape",
                     "ElectrolyteContainer",
+                    "ElectrochemicalCellPart",
                     "ElectrochemicalCellComponent",
                     "Atmosphere",
                 ],
@@ -2976,6 +3193,7 @@ class Atmosphere(ConfiguredBaseModel):
                     "Component",
                     "Electrolyte",
                     "ElectrolyteContainerComponent",
+                    "ElectrochemicalCellPart",
                     "Atmosphere",
                 ],
                 "examples": [
@@ -3098,6 +3316,7 @@ class Svgdigitizer(ConfiguredBaseModel):
                     "Electrode",
                     "Component",
                     "ElectrochemicalCell",
+                    "ElectrochemicalCellComponent",
                     "Svgdigitizer",
                 ]
             }
@@ -3144,7 +3363,9 @@ Electrolyte.model_rebuild()
 ElectrolyteContainer.model_rebuild()
 ElectrolyteContainerComponent.model_rebuild()
 ElectrochemicalCell.model_rebuild()
+ElectrochemicalCellPart.model_rebuild()
 ElectrochemicalCellComponent.model_rebuild()
+ElectrochemicalCellComponentSource.model_rebuild()
 ElectrochemicalCellSource.model_rebuild()
 ChemicalIdentifiers.model_rebuild()
 Atmosphere.model_rebuild()

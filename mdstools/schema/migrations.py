@@ -248,6 +248,90 @@ def _electrolyte_to_electrolytes(data: dict) -> dict:
     return result
 
 
+def _cell_components_to_parts(data: dict) -> dict:
+    r"""Breaking change: group the cell into parts with components (#128).
+
+    Replace the flat list ``system.electrochemicalCell.components`` of
+    ``{name, part, description}`` by ``system.electrochemicalCell.parts``. Each
+    old entry becomes one part, named after the old ``part`` and carrying the
+    old ``description``, with a single component named after the old ``name``.
+    The old ``name`` is not copied into ``material``, since it does not always
+    hold one. The list takes the position of the old key.
+
+    Pure ``dict -> dict``: the input is not mutated. Idempotent: if there is no
+    ``components`` on the cell (already migrated, or never present) the document
+    is returned unchanged.
+
+    :raises ValueError: if both ``components`` and ``parts`` are present
+        (ambiguous; needs manual resolution).
+
+    EXAMPLES::
+
+        >>> from mdstools.schema.migrations import (
+        ...     _cell_components_to_parts as move)
+        >>> before = {"system": {"electrochemicalCell": {
+        ...     "type": "glass cell",
+        ...     "components": [
+        ...         {"name": "glass", "part": "cell", "description": "Open beaker"},
+        ...         {"name": "nafion", "part": "membrane"}],
+        ...     "cellDescription": "A cell."}}}
+        >>> after = move(before)
+        >>> after["system"]["electrochemicalCell"]
+        {'type': 'glass cell', 'parts': [{'name': 'cell', 'description': 'Open beaker', 'components': [{'name': 'glass'}]}, {'name': 'membrane', 'components': [{'name': 'nafion'}]}], 'cellDescription': 'A cell.'}
+        >>> move(after) == after      # idempotent
+        True
+
+    """
+    result = deepcopy(data)
+
+    system = result.get("system")
+    cell = system.get("electrochemicalCell") if isinstance(system, dict) else None
+    if not isinstance(cell, dict) or "components" not in cell:
+        return result
+    if "parts" in cell:
+        raise ValueError(
+            "cannot migrate cell components: both electrochemicalCell.components "
+            "and electrochemicalCell.parts are present; resolve this manually "
+            "before migrating."
+        )
+
+    components = cell["components"]
+    if components is None:
+        del cell["components"]
+        return result
+    if not isinstance(components, list):
+        raise ValueError(
+            "cannot migrate cell components: electrochemicalCell.components is "
+            "not a list."
+        )
+
+    parts = []
+    for entry in components:
+        if not isinstance(entry, dict):
+            raise ValueError(
+                "cannot migrate cell components: an entry of "
+                "electrochemicalCell.components is not a mapping."
+            )
+        part_name = entry.get("part") or entry.get("name")
+        part = {"name": part_name}
+        if entry.get("description") is not None:
+            part["description"] = entry["description"]
+        component = {"name": entry["name"]} if entry.get("name") is not None else {}
+        part["components"] = [component]
+        parts.append(part)
+
+    position = list(cell).index("components")
+    del cell["components"]
+    if hasattr(cell, "insert"):  # ruamel CommentedMap: keep comments
+        cell.insert(position, "parts", parts)
+    else:
+        items = list(cell.items())
+        items.insert(position, ("parts", parts))
+        cell.clear()
+        cell.update(items)
+    return result
+
+
 #: Registered migrations, in ascending ``to_version`` order.
 #: The temperature move is unreleased; its concrete version is stamped in when
 #: the release is cut (see the ``finalize_migrations`` helper, added later).
@@ -275,5 +359,13 @@ MIGRATIONS: list[Migration] = [
             "naming the electrolyte 'electrolyte1'"
         ),
         apply=_electrolyte_to_electrolytes,
+    ),
+    Migration(
+        to_version=UNRELEASED,
+        description=(
+            "Replace system.electrochemicalCell.components with "
+            "system.electrochemicalCell.parts, each with its components"
+        ),
+        apply=_cell_components_to_parts,
     ),
 ]

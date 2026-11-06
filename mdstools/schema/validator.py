@@ -310,6 +310,101 @@ def validate_instrument_references(data: Any) -> list:
     return errors
 
 
+def _iter_system_blocks(node: Any):
+    """Yield every ``system``-like dict (one carrying ``electrochemicalCell``).
+
+    As for :func:`_iter_experimental_blocks`, the search is recursive so that
+    bare system objects, file-schema documents and data packages are covered.
+    """
+    if isinstance(node, dict):
+        if "electrochemicalCell" in node:
+            yield node
+        for value in node.values():
+            yield from _iter_system_blocks(value)
+    elif isinstance(node, list):
+        for item in node:
+            yield from _iter_system_blocks(item)
+
+
+def validate_electrolyte_references(data: Any) -> list:
+    r"""Check that every cell component references existing electrolyte names.
+
+    Within each ``system`` block,
+    ``electrochemicalCell.parts[].components[].contact`` lists the electrolytes a
+    component is in contact with by name; each name must match the ``name`` of an
+    entry in the same block's ``electrolytes`` list. JSON Schema cannot express
+    this cross-reference, so it is checked here.
+
+    :param data: Metadata dict (object, file-schema, or package document).
+    :returns: List of human-readable error messages (empty if all resolve).
+
+    EXAMPLES:
+
+        Resolving references pass silently::
+
+            >>> from mdstools.schema.validator import validate_electrolyte_references
+            >>> data = {"system": {
+            ...     "electrolytes": [{"name": "catholyte"}, {"name": "anolyte"}],
+            ...     "electrochemicalCell": {"parts": [{"name": "membrane", "components": [
+            ...         {"name": "membrane", "contact": ["catholyte", "anolyte"]}]}]}}}
+            >>> validate_electrolyte_references(data)
+            []
+
+        A dangling reference is reported::
+
+            >>> bad = {"system": {
+            ...     "electrolytes": [{"name": "catholyte"}],
+            ...     "electrochemicalCell": {"parts": [{"name": "degasser", "components": [
+            ...         {"name": "frit", "contact": ["anolyte"]}]}]}}}
+            >>> validate_electrolyte_references(bad)
+            ["electrochemicalCell part 'degasser', component 'frit': contact 'anolyte' does not match any electrolyte name (available: ['catholyte'])"]
+
+    """
+    errors = []
+    for system in _iter_system_blocks(data):
+        names = {
+            item.get("name")
+            for item in system.get("electrolytes") or []
+            if isinstance(item, dict) and item.get("name") is not None
+        }
+        cell = system.get("electrochemicalCell")
+        if not isinstance(cell, dict):
+            continue
+        for part in cell.get("parts") or []:
+            if not isinstance(part, dict):
+                continue
+            for component in part.get("components") or []:
+                if not isinstance(component, dict):
+                    continue
+                for electrolyte in component.get("contact") or []:
+                    if electrolyte not in names:
+                        errors.append(
+                            f"electrochemicalCell part '{part.get('name')}', "
+                            f"component '{component.get('name')}': contact "
+                            f"'{electrolyte}' does not match any electrolyte "
+                            f"name (available: {sorted(names)})"
+                        )
+    return errors
+
+
+def validate_references(data: Any) -> list:
+    r"""Run all reference checks that JSON Schema cannot express.
+
+    :param data: Metadata dict (object, file-schema, or package document).
+    :returns: List of human-readable error messages (empty if all resolve).
+
+    EXAMPLES::
+
+        >>> from mdstools.schema.validator import validate_references
+        >>> validate_references({"system": {"electrolytes": [],
+        ...     "electrochemicalCell": {"parts": [{"name": "cell", "components": [
+        ...         {"name": "cell body", "contact": ["KOH"]}]}]}}})
+        ["electrochemicalCell part 'cell', component 'cell body': contact 'KOH' does not match any electrolyte name (available: [])"]
+
+    """
+    return validate_instrument_references(data) + validate_electrolyte_references(data)
+
+
 # ---------------------------------------------------------------------------
 # Public remote-validation API
 # ---------------------------------------------------------------------------

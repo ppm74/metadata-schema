@@ -54,7 +54,7 @@ import jsonschema
 
 from mdstools.schema.validator import (
     load_yaml_metadata,
-    validate_instrument_references,
+    validate_references,
 )
 
 
@@ -152,7 +152,7 @@ def validate_objects():
             data = load_yaml_metadata(f)
 
         errors = validate_data(data, schema)
-        ref_errors = validate_instrument_references(data)
+        ref_errors = validate_references(data)
         if errors or ref_errors:
             print(f"  FAIL {obj}: {len(errors) + len(ref_errors)} error(s)")
             for err in errors[:5]:
@@ -196,7 +196,7 @@ def validate_file_schemas():
             data = load_yaml_metadata(f)
 
         errors = validate_data(data, schema)
-        ref_errors = validate_instrument_references(data)
+        ref_errors = validate_references(data)
         if errors or ref_errors:
             print(f"  FAIL {name}: {len(errors) + len(ref_errors)} error(s)")
             for err in errors[:5]:
@@ -295,7 +295,7 @@ def validate_package_schemas():
             data = json.load(f)
 
         errors = validate_data(data, schema, registry=registry)
-        ref_errors = validate_instrument_references(data)
+        ref_errors = validate_references(data)
         if errors or ref_errors:
             print(f"  FAIL {name}: {len(errors) + len(ref_errors)} error(s)")
             for err in errors[:5]:

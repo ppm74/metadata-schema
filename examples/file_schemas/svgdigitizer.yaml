@@ -274,11 +274,17 @@ system:
         url: https://www.preparation.html # Link to a page with a standard preparation procedure.
   electrochemicalCell:
     type: glass electrolysis cell
-    components: # list of components in contact with the electrolyte
-      - name: glass
-        part: cell
-      - name: nafion
-        part: membrane
+    parts: # functional parts of the cell in contact with or close to an electrolyte
+      - name: cell
+        components:
+          - name: cell body
+            material: glass
+            contact: [electrolyte1] # names from system.electrolytes
+      - name: membrane
+        components:
+          - name: membrane
+            material: Nafion
+            contact: [electrolyte1]
     cellDescription: A classical electrochemical cell. # freetext description
     preparationProcedure:
       description: # Short description of the cell preparation, such as cleaning.

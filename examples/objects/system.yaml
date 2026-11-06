@@ -172,12 +172,45 @@ electrodes:
       url: https://www.preparation.html # Link to a page with a standard preparation procedure.
 electrochemicalCell:
   type: glass electrolysis cell
-  components: # list of components in contact with the electrolyte
-    - name: glass
-      part: cell
-      description: Open beaker
-    - name: nafion
-      part: membrane
+  parts: # functional parts of the cell in contact with or close to an electrolyte
+    - name: cell body
+      description: Two compartments separated by a membrane.
+      components: # what the part is made of; a part of a single material has one component
+        - name: cell body
+          material: borosilicate glass
+          contact: [catholyte, anolyte] # names from system.electrolytes the component is in contact with
+    - name: membrane
+      description: Separates the two compartments.
+      components:
+        - name: membrane
+          material: Nafion
+          description: Cation exchange membrane.
+          contact: [catholyte, anolyte]
+          source:
+            manufacturer: Chemours
+            supplier: Sigma-Aldrich
+    - name: degasser
+      description: Saturates the electrolyte with N2.
+      comment: Replaced after each measurement series.
+      components:
+        - name: glass tube
+          material: borosilicate glass
+          contact: [catholyte]
+        - name: frit
+          material: borosilicate glass
+          description: Porosity 3.
+          contact: [catholyte]
+    - name: stirrer bar
+      components:
+        - name: core
+          material: steel # no contact: fully coated
+        - name: coating
+          material: PTFE
+          contact: [catholyte]
+    - name: working electrode holder
+      components:
+        - name: crocodile clamp
+          material: Sn-plated steel # no contact: holds the electrode wire above the electrolyte
   cellDescription: A description of the cell. # freetext description
   preparationProcedure:
     description: # Short description of the cell preparation, such as cleaning.

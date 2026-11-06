@@ -24,9 +24,9 @@ classes:
           - value: "H-cell"
           - value: "beaker glass"
           - value: "flow cell"
-      components:
-        range: ElectrochemicalCellComponent
-        description: Physical components and parts of the cell that are in contact with the electrolyte.
+      parts:
+        range: ElectrochemicalCellPart
+        description: Functional parts of the cell that are in contact with or close to an electrolyte, such as the cell body, a membrane, a degasser or an electrode holder.
         multivalued: true
         inlined_as_list: true
       cellDescription:
@@ -45,26 +45,78 @@ classes:
         description: Source and supplier information for the cell.
         inlined: true
 
-  ElectrochemicalCellComponent:
-    description: A component or part of the electrochemical cell.
+  ElectrochemicalCellPart:
+    description: A functional part of the electrochemical cell that is in contact with or close to an electrolyte.
     attributes:
       name:
         range: string
         required: true
-        description: Name or identifier of the component.
+        description: Name of the part.
         examples:
-          - value: "Cell body"
-      part:
+          - value: "cell body"
+          - value: "membrane"
+          - value: "degasser"
+      description:
         range: string
-        required: true
-        description: Part number or designation.
+        description: Detailed description of the part.
         examples:
-          - value: "EC-CELL-100"
+          - value: "Saturates the electrolyte with N2."
+      comment:
+        range: string
+        description: Additional comment on the part.
+        examples:
+          - value: "Replaced after each measurement series."
+      components:
+        range: ElectrochemicalCellComponent
+        description: What the part is made of. A part of a single material has one component.
+        multivalued: true
+        inlined_as_list: true
+
+  ElectrochemicalCellComponent:
+    description: A component of a part of the electrochemical cell, such as the glass tube or the membrane of a degasser.
+    attributes:
+      name:
+        range: string
+        description: Name of the component.
+        examples:
+          - value: "glass tube"
+          - value: "membrane"
+      material:
+        range: string
+        description: Material of the component.
+        examples:
+          - value: "borosilicate glass"
+          - value: "Nafion"
+          - value: "PTFE"
       description:
         range: string
         description: Detailed description of the component.
         examples:
-          - value: "Borosilicate glass cell with multiple ports"
+          - value: "Cation exchange membrane."
+      contact:
+        range: string
+        description: Names of the electrolytes in system.electrolytes that the component is in contact with. Omit for a component that is close to but not in contact with an electrolyte, such as a clamp holding an electrode.
+        multivalued: true
+        examples:
+          - value: "[catholyte, anolyte]"
+      source:
+        range: ElectrochemicalCellComponentSource
+        description: Source information for the component.
+        inlined: true
+
+  ElectrochemicalCellComponentSource:
+    description: Source information for a component of the electrochemical cell.
+    attributes:
+      manufacturer:
+        range: string
+        description: Name of the manufacturer.
+        examples:
+          - value: "Chemours"
+      supplier:
+        range: string
+        description: Name of the supplier.
+        examples:
+          - value: "Sigma-Aldrich"
 
   ElectrochemicalCellSource:
     description: Source information for the electrochemical cell.
